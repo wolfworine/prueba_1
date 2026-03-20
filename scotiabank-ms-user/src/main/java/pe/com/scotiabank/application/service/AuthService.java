@@ -37,7 +37,6 @@ public class AuthService implements AuthServicePort {
     private final PhonePersistencePort phonePersistencePort;
     private final UserRestMapper userRestMapper;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final TokenProvider tokenProvider;
 
     @Override
     public Mono<UserResponse> login(LoginRequest request) {
@@ -45,7 +44,7 @@ public class AuthService implements AuthServicePort {
                 .filter(user -> passwordEncoder.matches(request.password(), user.getPassword()))
                 .switchIfEmpty(Mono.error(new InvalidCredentialException(INVALID_USER.getTitle())))
                 .flatMap(this::addPhones)
-                .map(this::addToken)
+                .flatMap(this::addToken)
                 .map(userRestMapper::toUserResponse);
     }
 
@@ -58,11 +57,8 @@ public class AuthService implements AuthServicePort {
                 });
     }
 
-    private User addToken(User user) {
-        String token = tokenProvider.generateToken(user);
-        user.setToken(token);
-        //userPersistencePort.updateToken(user, token); // Update user with token asynchronously
-        return user;
+    private Mono<User> addToken(User user) {
+        return  userPersistencePort.updateToken(user);
     }
 
     @Override
@@ -107,39 +103,4 @@ public class AuthService implements AuthServicePort {
         user.setRole(RoleEnum.USER);
         return user;
     }
-
-    @Override
-    public Mono<String> logout(Login login) {
-        // implement logout logic or throw an exception
-        throw new UnsupportedOperationException("Logout not implemented");
-    }
-
-    @Override
-    public Mono<String> recoverPassword(Login login) {
-        // implement recover password logic or throw an exception
-        throw new UnsupportedOperationException("Recover password not implemented");
-    }
-/*
-    private Mono<User> createUserAndSave(RegisterRequest request) {
-        return Mono.defer(() -> {
-            //User newUser = createUser(request);
-            return userPersistencePort.save(userRestMapper.toUser(request));
-        });
-    }*/
-/*
-    private User createUser(RegisterRequest request) {
-        User user = userRestMapper.toUser(request);
-        user.setId(UUID.randomUUID().toString());
-        user.setPassword(encodePassword(request.password()));
-        user.setRole(RoleEnum.USER);
-        user.setIsActive(Constants.ENABLED);
-        user.setCreated(Constants.convertToLocalTimeZone(LocalDateTime.now()));
-        user.setLastLogin(Constants.convertToLocalTimeZone(LocalDateTime.now()));
-        return user;
-    }
-
-    private String encodePassword(String rawPassword) {
-        return passwordEncoder.encode(rawPassword);
-    }*/
-
 }

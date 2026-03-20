@@ -14,5 +14,5 @@ public interface UserPersistencePort {
     Mono<User> save(User user);
     Mono<Void> delete(String id);
 
-    Mono<User>  updateToken(User user, String token);
+    Mono<User>  updateToken(User user);
 }

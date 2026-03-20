@@ -38,19 +38,4 @@ public class AuthController {
                         .status(HttpStatus.CREATED)
                         .body(login));
     }
-/*
-    @PostMapping("/token-refresh")
-    public Mono<ResponseEntity<AuthResponse>> tokenRefresh(@RequestBody LoginRequest request) {
-        return null;
-    }
-
-    @PostMapping("/logout")
-    public Mono<ResponseEntity<String>> logout(@RequestBody LoginRequest loginRequest) {
-        return null;
-    }
-
-    @PostMapping("/recover-password")
-    public Mono<ResponseEntity<String>> recoverPassword(@RequestBody LoginRequest loginRequest) {
-        return null;
-    }*/
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -26,7 +27,6 @@ import pe.com.scotiabank.infrastructure.adapter.config.SecurityConfig;
 import pe.com.scotiabank.infrastructure.adapter.input.rest.model.enums.RoleEnum;
 import pe.com.scotiabank.infrastructure.adapter.input.rest.model.input.LoginRequest;
 import pe.com.scotiabank.infrastructure.adapter.input.rest.model.input.RegisterRequest;
-import pe.com.scotiabank.infrastructure.adapter.input.rest.model.output.AuthResponse;
 import pe.com.scotiabank.infrastructure.adapter.input.rest.model.output.UserResponse;
 import pe.com.scotiabank.infrastructure.adapter.output.persistence.repository.UserRepository;
 import pe.com.scotiabank.infrastructure.adapter.security.JwtAuthenticationManager;
@@ -58,7 +58,7 @@ class AuthControllerTest {
     private UserRepository userRepository;
 
     private String jsonRequest;
-/*
+
     @Test
     @Order(1)
     void loginReturnsOkWhenCredentialsAreValid() {
@@ -82,7 +82,17 @@ class AuthControllerTest {
                 .role(RoleEnum.USER)
                 .build();
 
-        AuthResponse response = new AuthResponse("eyJhbGciOiJIUzI1NiJ9...", user);
+        UserResponse response = new UserResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getPhones(),
+                user.getCreated(),
+                user.getModified(),
+                user.getLastLogin(),
+                user.getToken()
+        );
 
         when(authService.login(any(LoginRequest.class))).thenReturn(Mono.just(response));
 
@@ -92,7 +102,7 @@ class AuthControllerTest {
                 .bodyValue(jsonRequest)
                 .exchange()
                 .expectStatus().is2xxSuccessful()
-                .expectBody(AuthResponse.class)
+                .expectBody(UserResponse.class)
                 .isEqualTo(response);
     }
 
@@ -109,7 +119,7 @@ class AuthControllerTest {
                 .exchange()
                 .expectStatus().isNotFound();
     }
-*/
+
     @Test
     @Order(3)
     void registerReturnsCreatedWhenUserIsNew() {
@@ -145,8 +155,19 @@ class AuthControllerTest {
                 .role(RoleEnum.USER)
                 .build();
 
-        //User response = new User(user);
-        when(authService.register(any(RegisterRequest.class))).thenReturn(Mono.just(null));
+        UserResponse response = new UserResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getPhones(),
+                user.getCreated(),
+                user.getModified(),
+                user.getLastLogin(),
+                user.getToken()
+        );
+
+        when(authService.register(any(RegisterRequest.class))).thenReturn(Mono.just(response));
 
         webTestClient.post()
                 .uri("/auth/api/register")
@@ -154,8 +175,8 @@ class AuthControllerTest {
                 .bodyValue(jsonRequest)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectBody(User.class)
-                .isEqualTo(user);
+                .expectBody(UserResponse.class)
+                .isEqualTo(response);
     }
 
     @Test
@@ -181,6 +202,6 @@ class AuthControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(jsonRequest)
                 .exchange()
-                .expectStatus().is5xxServerError();
+                .expectStatus().isEqualTo(HttpStatus.CONFLICT.value());
     }
 }

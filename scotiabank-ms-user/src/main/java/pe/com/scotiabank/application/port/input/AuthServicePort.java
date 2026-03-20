@@ -11,6 +11,4 @@ import reactor.core.publisher.Mono;
 public interface AuthServicePort {
     Mono<UserResponse> login(LoginRequest request);
     Mono<UserResponse> register(RegisterRequest request);
-    Mono<String> logout(Login login);
-    Mono<String> recoverPassword(Login login);
 }

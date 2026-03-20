@@ -12,6 +12,7 @@ public enum ErrorCatalog {
     USER_DUPLICATE("ERR_USER_003", "Duplicate user is not allowed.","No se admite usuario duplicado."),
     INVALID_TOKEN("ERR_INVALID_TOKEN_004", "Invalid token.","Token invalido."),
     NOT_FOUND("ERR_NOT_FOUND_001", "Elemento not found.","Elemento no encontrado."),
+    INVALID_FORMAT("ERR_INVALID_FORMAT_005", "invalid Format.","Formato invalido."),
     GENERIC_ERROR("ERR_GEN_001", "An unexpected error occurred.","Se produjo un error inesperado.");
 
 

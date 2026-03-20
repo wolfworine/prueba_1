@@ -63,11 +63,12 @@ public class UserRestAdapter implements UserPersistencePort {
 
     private UserEntity createUser(User user) {
         UserEntity entity = userMapper.toUserEntity(user);
+        String token = tokenProvider.generateToken(user);
+        entity.setToken(token);
         entity.setPassword(encodePassword(user.getPassword()));
         entity.setIsActive(Constants.ENABLED);
         entity.setCreated(Constants.convertToLocalTimeZone(LocalDateTime.now()));
         entity.setLastLogin(Constants.convertToLocalTimeZone(LocalDateTime.now()));
-        entity.setToken(tokenProvider.generateToken(user));
         entity.setNewEntry(true);
         return entity;
     }
@@ -112,8 +113,9 @@ public class UserRestAdapter implements UserPersistencePort {
     }
 
     @Override
-    public Mono<User> updateToken(User user, String token) {
+    public Mono<User> updateToken(User user) {
         UserEntity userEntity = userMapper.toUserEntity(user);
+        String token = tokenProvider.generateToken(user);
         userEntity.setToken(token);
         userEntity.setModified(Constants.convertToLocalTimeZone(LocalDateTime.now()));
         userEntity.setNewEntry(false);

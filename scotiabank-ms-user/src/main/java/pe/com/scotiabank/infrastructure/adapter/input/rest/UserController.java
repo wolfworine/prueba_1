@@ -1,5 +1,6 @@
 package pe.com.scotiabank.infrastructure.adapter.input.rest;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/users/api")
 public class UserController {
 
+
     private final UserServicePort servicePort;
     private final UserRestMapper restMapper;
 
@@ -41,7 +43,7 @@ public class UserController {
     }
 
     @PostMapping("")
-    public Mono<ResponseEntity<UserResponse>> register(@RequestBody UserRequest request) {
+    public Mono<ResponseEntity<UserResponse>> register(@Valid @RequestBody UserRequest request) {
         return servicePort.save(restMapper.toUser(request))
                 .map(account -> ResponseEntity.status(HttpStatus.CREATED)
                         .body(restMapper.toUserResponse(account)));

@@ -16,11 +16,7 @@ public class Constants {
     public static final String BEARER = "Bearer ";
     public static final Boolean ENABLED= true;
     public static final String ERROR_SAVING= "Error saving {}: {}";
-    public static final String ERROR_DELETED= "Error deleted {}: {}";
-    public static final String ACCOUNT = "account";
     public static final String USER = "user";
-    public static final String BALANCE = "balance";
-    public static final String TRANSFER = "transfer";
 
     public static LocalDateTime convertToLocalTimeZone(LocalDateTime date) {
         if (date != null) {

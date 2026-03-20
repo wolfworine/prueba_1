@@ -2,14 +2,18 @@ package pe.com.scotiabank.application.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.com.scotiabank.application.port.input.UserServicePort;
 import pe.com.scotiabank.application.port.output.PhonePersistencePort;
 import pe.com.scotiabank.application.port.output.UserPersistencePort;
 import pe.com.scotiabank.domain.exception.DuplicateUserException;
+import pe.com.scotiabank.domain.exception.InvalidCredentialException;
+import pe.com.scotiabank.domain.exception.InvalidFormatException;
 import pe.com.scotiabank.domain.exception.UserNotFoundException;
 import pe.com.scotiabank.domain.model.Phone;
 import pe.com.scotiabank.domain.model.User;
+import pe.com.scotiabank.infrastructure.adapter.config.ValidationProperties;
 import pe.com.scotiabank.infrastructure.adapter.input.rest.model.enums.RoleEnum;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -24,6 +28,8 @@ import static pe.com.scotiabank.utils.ErrorCatalog.USER_NOT_FOUND;
 @Slf4j
 public class UserService implements UserServicePort {
 
+    @Autowired
+    private ValidationProperties validationProperties;
     private final UserPersistencePort userPersistencePort;
     private final PhonePersistencePort phonePersistencePort;
 
@@ -56,8 +62,9 @@ public class UserService implements UserServicePort {
 
     @Override
     public Mono<User> save(User user) {
-        return userPersistencePort.findByEmail(user.getEmail())
-                .hasElement()
+        return validateUser(user)
+                .flatMap(userValid -> userPersistencePort.findByEmail(userValid.getEmail())
+                .hasElement())
                 .flatMap(exists -> {
                     if (Boolean.TRUE.equals(exists)) {
                         return Mono.error(new DuplicateUserException("User with email already exists"));
@@ -66,6 +73,13 @@ public class UserService implements UserServicePort {
                             .flatMap(userPersistencePort::save)
                             .flatMap(this::savePhones);
                 });
+    }
+
+    private Mono<User> validateUser(User user) {
+        return Mono.fromCallable(() -> {
+            validatePasswordFormat(user.getPassword());
+            return user;
+        });
     }
 
     private Mono<User> savePhones(User user) {
@@ -153,4 +167,11 @@ public class UserService implements UserServicePort {
 
     }
 
+    private void validatePasswordFormat(String password) {
+        if (password == null || !password.matches(validationProperties.getPasswordRegex())) {
+            throw new InvalidFormatException(
+                    "La clave debe tener al menos 8 caracteres, incluir letras y números"
+            );
+        }
+    }
 }
