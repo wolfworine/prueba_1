@@ -1,0 +1,316 @@
+{
+  "info": {
+    "_postman_id": "ad4826ec-bae5-4683-8743-19fc18f4c9ac",
+    "name": "Api WorkshopScotia",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "1961221"
+  },
+  "item": [
+    {
+      "name": "1_Auth",
+      "item": [
+        {
+          "name": "Add User&Account",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"John Doe\",\r\n  \"email\": \"john.doe@example.com\",\r\n  \"password\": \"securePassword123\",\r\n  \"phones\": [\r\n    {\r\n      \"number\": \"945749\",\r\n      \"cityCode\": \"1\",\r\n      \"countryCode\": \"57\"\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/api/register",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "api",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "      {\r\n        \"email\": \"Cesarcesar@test.com\",\r\n        \"password\": \"securePassword123\"\r\n      }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/api/login",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "api",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Duplicate",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"John Doe\",\r\n  \"email\": \"john.doe@example.com\",\r\n  \"password\": \"securePassword123\",\r\n  \"phones\": [\r\n    {\r\n      \"number\": \"945749\",\r\n      \"cityCode\": \"1\",\r\n      \"countryCode\": \"57\"\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/api/register",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "api",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2_User",
+      "item": [
+        {
+          "name": "Add User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"John1 Doe\",\r\n  \"email\": \"john1.doe@example.com\",\r\n  \"password\": \"securePassword123\",\r\n  \"phones\": [\r\n    {\r\n      \"number\": \"945749756\",\r\n      \"cityCode\": \"1\",\r\n      \"countryCode\": \"57\"\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/api",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "api"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all user",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/api",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "api"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get user by id",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/api/:id",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "api",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "a532ee05-f7a4-48e1-9776-5d0d12902a6d"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"John3 Doe\",\r\n  \"phones\": [\r\n        {\r\n            \"id\": \"6dd2db44-074c-4bb1-ac75-289a020f2262\",\r\n            \"number\": \"94574966\",\r\n            \"cityCode\": \"1\",\r\n            \"countryCode\": \"57\"\r\n        }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/api/:id",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "api",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "a532ee05-f7a4-48e1-9776-5d0d12902a6d"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete user by id",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/api/:id",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "api",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "a532ee05-f7a4-48e1-9776-5d0d12902a6d"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
